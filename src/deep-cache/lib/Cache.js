@@ -62,12 +62,17 @@ export class Cache extends Kernel.ContainerAware {
     this._driver = Cache.createDriver(driverName/*, kernel.config.cacheDsn*/);
     this._driver.buildId = kernel.buildId;
 
-    kernel.container.addService(
-      `${this.name}.prototype`,
-      this
-    );
-
     callback();
+  }
+
+  /**
+   * @param {AbstractDriver} target
+   * @param {String} thisArg
+   * @param {*[]} argumentsList
+   * @returns {*}
+   */
+  apply(target, thisArg, argumentsList) {
+    return target[thisArg](...argumentsList);
   }
 
   /**
